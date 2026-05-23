@@ -1,0 +1,42 @@
+{
+  "name": "@ytpresence/desktop",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "./out/main/index.js",
+  "scripts": {
+    "dev": "corepack pnpm --filter @ytpresence/shared build && electron-vite dev",
+    "build": "corepack pnpm --filter @ytpresence/shared build && electron-vite build",
+    "package:desktop": "corepack pnpm build && electron-builder --win --dir",
+    "lint": "eslint \"src/**/*.ts\"",
+    "typecheck": "tsc --noEmit -p tsconfig.node.json && tsc --noEmit -p tsconfig.web.json"
+  },
+  "dependencies": {
+    "@xhayper/discord-rpc": "^1.2.0",
+    "@ytpresence/shared": "workspace:*",
+    "discord-api-types": "^0.38.31",
+    "ws": "^8.18.3"
+  },
+  "devDependencies": {
+    "@types/node": "^24.10.1",
+    "@types/ws": "^8.18.1",
+    "electron": "^39.2.3",
+    "electron-builder": "^26.0.12",
+    "electron-vite": "^4.0.0",
+    "vite": "^7.2.4"
+  },
+  "build": {
+    "appId": "dev.ytpresence.app",
+    "productName": "YTPresence",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "out/**",
+      "package.json"
+    ],
+    "win": {
+      "target": ["nsis", "portable"]
+    }
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "manifest_version": 3,
+  "name": "YTPresence Companion",
+  "description": "Sends YouTube Music metadata to the local YTPresence desktop app.",
+  "version": "0.1.0",
+  "action": {
+    "default_title": "YTPresence",
+    "default_popup": "popup.html"
+  },
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://music.youtube.com/*"],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "permissions": ["storage"],
+  "host_permissions": [
+    "https://music.youtube.com/*",
+    "ws://127.0.0.1/*",
+    "http://127.0.0.1/*"
+  ]
+}

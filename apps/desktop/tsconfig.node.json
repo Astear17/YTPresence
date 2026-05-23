@@ -1,0 +1,17 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "types": ["node", "electron"],
+    "baseUrl": "../..",
+    "paths": {
+      "@ytpresence/shared": ["packages/shared/src/index.ts"]
+    }
+  },
+  "include": [
+    "electron.vite.config.ts",
+    "src/main/**/*.ts",
+    "src/preload/**/*.ts"
+  ]
+}

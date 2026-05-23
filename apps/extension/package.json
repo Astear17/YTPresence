@@ -1,0 +1,19 @@
+{
+  "name": "@ytpresence/extension",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "corepack pnpm --filter @ytpresence/shared build && vite build --watch",
+    "build": "corepack pnpm --filter @ytpresence/shared build && vite build && node scripts/copy-static.mjs",
+    "lint": "eslint \"src/**/*.ts\"",
+    "typecheck": "tsc --noEmit -p tsconfig.json"
+  },
+  "dependencies": {
+    "@ytpresence/shared": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/chrome": "^0.0.326",
+    "vite": "^7.2.4"
+  }
+}

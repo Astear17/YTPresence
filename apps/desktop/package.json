@@ -7,7 +7,7 @@
   "scripts": {
     "dev": "corepack pnpm --filter @ytpresence/shared build && electron-vite dev",
     "build": "corepack pnpm --filter @ytpresence/shared build && electron-vite build",
-    "package:desktop": "corepack pnpm build && electron-builder --win --dir",
+    "package:desktop": "corepack pnpm build && electron-builder --win nsis",
     "lint": "eslint \"src/**/*.ts\"",
     "typecheck": "tsc --noEmit -p tsconfig.node.json && tsc --noEmit -p tsconfig.web.json"
   },
@@ -33,10 +33,18 @@
     },
     "files": [
       "out/**",
+      "assets/**",
       "package.json"
     ],
     "win": {
-      "target": ["nsis", "portable"]
+      "icon": "assets/icon.ico",
+      "target": ["nsis"]
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true,
+      "artifactName": "YTPresence-Setup-${version}.${ext}"
     }
   }
 }

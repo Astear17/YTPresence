@@ -17,12 +17,16 @@ let settingsWindow: SettingsWindow;
 let tray: AppTray;
 let isQuitting = false;
 
+const STARTUP_HIDDEN_ARG = "--hidden";
 const gotLock = app.requestSingleInstanceLock();
 if (!gotLock) {
   app.quit();
 }
 
-app.on("second-instance", () => {
+app.on("second-instance", (_event, argv) => {
+  if (argv.includes(STARTUP_HIDDEN_ARG)) {
+    return;
+  }
   settingsWindow?.open();
 });
 
@@ -135,7 +139,7 @@ function applyWindowsStartup(settings: AppSettings): void {
   app.setLoginItemSettings({
     openAtLogin: settings.startWithWindows,
     path: process.execPath,
-    args: []
+    args: [STARTUP_HIDDEN_ARG]
   });
 }
 

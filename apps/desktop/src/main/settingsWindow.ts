@@ -1,6 +1,7 @@
 import { BrowserWindow, shell } from "electron";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
+import { getAppIconPath } from "./appIcon";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -21,6 +22,7 @@ export class SettingsWindow {
       minHeight: 620,
       show: false,
       title: "YTPresence Settings",
+      icon: getAppIconPath(),
       webPreferences: {
         preload: join(__dirname, "../preload/index.mjs"),
         contextIsolation: true,

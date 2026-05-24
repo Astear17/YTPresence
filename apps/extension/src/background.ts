@@ -1,6 +1,7 @@
 import { validateTrackInfo, type TrackInfo } from "@ytpresence/shared";
 
 const WS_URL = "ws://127.0.0.1:33879";
+const YOUTUBE_MUSIC_URL_PATTERN = "https://music.youtube.com/*";
 
 interface ExtensionStatus {
   connected: boolean;
@@ -40,11 +41,34 @@ chrome.runtime.onMessage.addListener((message: RuntimeMessage, _sender, sendResp
 
   if (message.type === "status:get") {
     connect();
+    void injectIntoMusicTabs();
     sendResponse(status);
     return false;
   }
 
   return false;
+});
+
+chrome.runtime.onInstalled.addListener(() => {
+  void injectIntoMusicTabs();
+});
+
+chrome.runtime.onStartup.addListener(() => {
+  void injectIntoMusicTabs();
+});
+
+chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
+  if (changeInfo.status === "complete" && tab.url?.startsWith("https://music.youtube.com/")) {
+    void injectContentScript(tabId);
+  }
+});
+
+chrome.tabs.onActivated.addListener(({ tabId }) => {
+  void chrome.tabs.get(tabId, (tab) => {
+    if (tab.url?.startsWith("https://music.youtube.com/")) {
+      void injectContentScript(tabId);
+    }
+  });
 });
 
 function sendTrack(track: TrackInfo): void {
@@ -53,6 +77,32 @@ function sendTrack(track: TrackInfo): void {
 
   if (socket?.readyState === WebSocket.OPEN) {
     flushPendingTrack();
+  }
+}
+
+async function injectIntoMusicTabs(): Promise<void> {
+  try {
+    const tabs = await chrome.tabs.query({ url: YOUTUBE_MUSIC_URL_PATTERN });
+    await Promise.all(tabs.map((tab) => (tab.id === undefined ? Promise.resolve() : injectContentScript(tab.id))));
+  } catch (error) {
+    status = {
+      ...status,
+      lastError: error instanceof Error ? error.message : "Unable to inject content script."
+    };
+  }
+}
+
+async function injectContentScript(tabId: number): Promise<void> {
+  try {
+    await chrome.scripting.executeScript({
+      target: { tabId },
+      files: ["content.js"]
+    });
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    if (!message.includes("Cannot access") && !message.includes("No tab with id")) {
+      status = { ...status, lastError: message };
+    }
   }
 }
 

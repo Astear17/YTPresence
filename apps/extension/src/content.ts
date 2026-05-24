@@ -14,7 +14,11 @@ let lastSignature = "";
 let publishTimer: ReturnType<typeof setTimeout> | undefined;
 let observedMedia: HTMLMediaElement | undefined;
 
-start();
+const globalState = globalThis as typeof globalThis & { __ytpresenceContentActive?: boolean };
+if (!globalState.__ytpresenceContentActive) {
+  globalState.__ytpresenceContentActive = true;
+  start();
+}
 
 function start(): void {
   attachMediaListeners();
@@ -137,8 +141,8 @@ function collectTrackInfo(): TrackInfo {
 }
 
 function readMediaSession(): MediaSessionMetadataLike | undefined {
-  const mediaSession = navigator.mediaSession as MediaSession & { metadata?: MediaSessionMetadataLike };
-  return mediaSession.metadata;
+  const mediaSession = navigator.mediaSession as (MediaSession & { metadata?: MediaSessionMetadataLike }) | undefined;
+  return mediaSession?.metadata;
 }
 
 function detectPlaybackState(media: HTMLMediaElement | undefined): TrackInfo["playbackState"] {

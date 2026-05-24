@@ -106,7 +106,17 @@ cd D:\GitHub\YTPresence
 pnpm package:desktop
 ```
 
-Electron Builder writes packages under `apps/desktop/release`.
+Electron Builder writes the NSIS installer under `apps/desktop/release` as `YTPresence-Setup-<version>.exe`.
+
+## Build Installer on GitHub
+
+The repository includes a manual workflow at `.github/workflows/build-windows-installer.yml`.
+
+1. Open the repository on GitHub.
+2. Go to Actions.
+3. Select `Build Windows Installer`.
+4. Click `Run workflow`.
+5. Download the `YTPresence-Windows-Installer` artifact when the run finishes.
 
 ## Load the Browser Extension
 
@@ -120,10 +130,12 @@ Electron Builder writes packages under `apps/desktop/release`.
 
 The extension popup shows whether it is connected to the desktop app and the last detected track.
 
+After rebuilding the extension, click the extension reload button on the browser extensions page. Existing YouTube Music tabs should be injected automatically, but refreshing the YouTube Music tab is still a useful sanity check.
+
 ## Settings
 
 - Enable presence: turn Discord updates on or off.
-- Start with Windows: applies in packaged builds.
+- Start with Windows: applies in packaged builds and launches hidden in the tray.
 - Show album art: sends the YouTube thumbnail as the Discord large image.
 - Show elapsed time: sends start/end timestamps when media time is available.
 - Show paused status: either keep a paused presence or clear when paused.
@@ -154,6 +166,7 @@ The extension popup shows whether it is connected to the desktop app and the las
 
 - Confirm the extension is loaded from `apps/extension/dist`.
 - Refresh `https://music.youtube.com/` after loading the extension.
+- If the extension was rebuilt while Chrome was open, reload the extension from `chrome://extensions` or `edge://extensions`.
 - Open the extension popup and check the current track.
 - Play a track in the active tab.
 
@@ -197,3 +210,13 @@ D:/GitHub/YTPresence
   packages/
     shared/     Shared TypeScript types and validation
 ```
+
+## App Icon
+
+The replaceable source icon files are:
+
+- `apps/desktop/assets/icon.ico` for the Windows executable and installer.
+- `apps/desktop/assets/icon.png` for the tray icon and settings window icon.
+- `apps/desktop/assets/icon.svg` as the editable vector source used for the default icon.
+
+If you replace the branding later, replace at least `icon.ico` and `icon.png`, then rebuild/package the app.

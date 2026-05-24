@@ -107,7 +107,7 @@ function settingsView(): string {
     <section class="panel">
       <h3>Startup</h3>
       <div class="setting-list">
-        ${toggle("startWithWindows", "Start with Windows", "Enable after packaging and installing the app.")}
+        ${toggle("startWithWindows", "Start with Windows", "Launch hidden in the tray after you sign in.")}
       </div>
     </section>
 

@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "corepack pnpm --filter @ytpresence/shared build && vite build --watch",
     "build": "corepack pnpm --filter @ytpresence/shared build && vite build && node scripts/copy-static.mjs",
+    "package:extension": "corepack pnpm build && node scripts/package-extension.mjs",
     "lint": "eslint \"src/**/*.ts\"",
     "typecheck": "tsc --noEmit -p tsconfig.json"
   },

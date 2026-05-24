@@ -9,6 +9,8 @@
     "dev": "corepack pnpm --filter @ytpresence/desktop dev",
     "build": "corepack pnpm -r build",
     "package:desktop": "corepack pnpm --filter @ytpresence/desktop package:desktop",
+    "package:extension": "corepack pnpm --filter @ytpresence/extension package:extension",
+    "package:release": "corepack pnpm package:desktop && corepack pnpm package:extension",
     "lint": "corepack pnpm -r lint",
     "typecheck": "corepack pnpm -r typecheck"
   },

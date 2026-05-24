@@ -108,15 +108,40 @@ pnpm package:desktop
 
 Electron Builder writes the NSIS installer under `apps/desktop/release` as `YTPresence-Setup-<version>.exe`.
 
-## Build Installer on GitHub
+## Package Browser Extension
 
-The repository includes a manual workflow at `.github/workflows/build-windows-installer.yml`.
+```powershell
+cd D:\GitHub\YTPresence
+pnpm package:extension
+```
+
+The extension package is written under `apps/extension/release` as `YTPresence-Companion-Extension-<version>.zip`. This zip contains the built `manifest.json`, background worker, content script, and popup files for manual loading or release distribution.
+
+## Package Release Locally
+
+```powershell
+cd D:\GitHub\YTPresence
+pnpm package:release
+```
+
+This builds both release assets:
+
+- Windows installer: `apps/desktop/release/YTPresence-Setup-<version>.exe`
+- Browser extension: `apps/extension/release/YTPresence-Companion-Extension-<version>.zip`
+
+## Build And Release on GitHub
+
+The repository includes a manual workflow at `.github/workflows/build-and-release.yml`.
 
 1. Open the repository on GitHub.
 2. Go to Actions.
-3. Select `Build Windows Installer`.
+3. Select `Build & Release`.
 4. Click `Run workflow`.
-5. Download the `YTPresence-Windows-Installer` artifact when the run finishes.
+5. Enter the release tag and release title.
+6. Keep `draft` enabled if you want to review before publishing.
+7. Download the `YTPresence-Release-Assets` artifact or publish the generated GitHub Release.
+
+The workflow uploads both the Windows installer and the browser extension zip to the GitHub Release.
 
 ## Load the Browser Extension
 
@@ -131,6 +156,8 @@ The repository includes a manual workflow at `.github/workflows/build-windows-in
 The extension popup shows whether it is connected to the desktop app and the last detected track.
 
 After rebuilding the extension, click the extension reload button on the browser extensions page. Existing YouTube Music tabs should be injected automatically, but refreshing the YouTube Music tab is still a useful sanity check.
+
+For release downloads, extract `YTPresence-Companion-Extension-<version>.zip` first, then choose the extracted folder in `Load unpacked`.
 
 ## Settings
 
@@ -196,6 +223,8 @@ pnpm install
 pnpm dev
 pnpm build
 pnpm package:desktop
+pnpm package:extension
+pnpm package:release
 pnpm lint
 pnpm typecheck
 ```
